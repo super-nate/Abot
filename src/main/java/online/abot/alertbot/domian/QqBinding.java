@@ -17,6 +17,8 @@ public class QqBinding implements Serializable {
 
     private int isEnabled;
 
+
+
     public QqBinding(@NotEmpty String qqId, @NotEmpty String accountId) {
         this.qqId = qqId;
         this.accountId = accountId;
@@ -27,6 +29,13 @@ public class QqBinding implements Serializable {
         this.qqId = qqId;
         this.accountId = accountId;
         this.isEnabled = isEnabled;
+    }
+
+    public QqBinding(int id, @NotEmpty String qqId, @NotEmpty String accountId, boolean isEnabled) {
+        this.id = id;
+        this.qqId = qqId;
+        this.accountId = accountId;
+        this.isEnabled = isEnabled?1:0;
     }
 
     public int getId() {

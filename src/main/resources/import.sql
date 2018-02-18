@@ -1,10 +1,10 @@
-drop table if exists accounts;
+drop table if exists qq_binding;
 
 CREATE TABLE qq_binding (
     id int NOT NULL AUTO_INCREMENT,
-    qqId varchar(255) NOT NULL UNIQUE ,
-    accountId varchar(255) NOT NULL,
-    is_abled tinyint(1) unsigned NOT NULL,
+    qq_id varchar(255) NOT NULL ,
+    account_id varchar(255) NOT NULL,
+    is_enabled tinyint(1) unsigned NOT NULL,
     PRIMARY KEY (id)
 );
 

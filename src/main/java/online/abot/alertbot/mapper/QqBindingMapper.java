@@ -16,7 +16,7 @@ public interface QqBindingMapper {
     @Select("select * from qq_binding")
     List<QqBinding> findAll();
 
-    @Insert("insert into qq_binding(qq_id,account_id,is_enabled) values(#{qq_id},#{account_id},#{is_enabled})")
+    @Insert("insert into qq_binding(qq_id,account_id,is_enabled) values(#{qqId},#{accountId},#{isEnabled})")
     void insertQQBinding(QqBinding qqBinding);
 
     @Delete("delete from qq_binding where qq_id =#{qq_id} and account_id= #{account_id}")
