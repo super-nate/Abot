@@ -82,7 +82,8 @@ public class StellarServiceImpl implements StellarService {
         String type= jsonObj.getString("type");
 
         if ("payment".equals(type)){
-
+            String time = jsonObj.getString("created_at");
+            String txHash  = jsonObj.getString("transaction_hash");
             String sourceAccount = jsonObj.getString("source_account");
             String from = jsonObj.getString("from");
             String to = jsonObj.getString("to");
@@ -94,7 +95,17 @@ public class StellarServiceImpl implements StellarService {
                 assetCode = jsonObj.getString("asset_code");
                 assetIssuer=jsonObj.getString("asset_issuer");
             }
-            String notify = "账号"+from+ "发送"+num+assetCode+"("+assetIssuer+")"+"到账号"+to;
+
+            String template = "时间:%s\n" +
+                    "类型：%s\n" +
+                    "资金账户：%s\n" +
+                    "接受账户：%s\n" +
+                    "金额：%s %s（%s）\n"+
+                    "交易哈希：%s";
+
+            //String notify = "账号"+from+ "发送"+num+assetCode+"("+assetIssuer+")"+"到账号"+to;
+
+            String notify = String.format(template, time, type, from, to, num, assetCode, assetIssuer, txHash);
 
             Set<String> subscribers = mappingService.getSubscribers(sourceAccount);
             Set<String> subscribers1 = mappingService.getSubscribers(from);
@@ -113,6 +124,8 @@ public class StellarServiceImpl implements StellarService {
         }
 
         if ("manage_offer".equals(type)){
+            String time = jsonObj.getString("created_at");
+            String txHash  = jsonObj.getString("transaction_hash");
             String sourceAccount = jsonObj.getString("source_account");
             if(!accounts.contains(sourceAccount)){
                 return;
@@ -137,7 +150,19 @@ public class StellarServiceImpl implements StellarService {
             String num = jsonObj.getString("amount");
             String price = jsonObj.getString("price");
 
-            String notify = "账号"+sourceAccount+ "以价格"+price+buyingAssetCode+"("+buyingAssetIssuer+")"+"卖出"+num+sellingAssetCode+"("+sellingAssetIssuer+")";
+            double sellingNum = Double.valueOf(num);
+            double sellingPrice = Double.valueOf(price);
+            String buyingNum = String.valueOf(sellingNum*sellingPrice);
+
+            String template = "时间：%s\n" +
+                    "类型：%s\n" +
+                    "资金账户：%s\n" +
+                    "卖出：%s %s（%s）\n" +
+                    "买入：%s %s（%s）\n" +
+                    "价格：1 %s=%s %s";
+
+            //String notify = "账号"+sourceAccount+ "以价格"+price+buyingAssetCode+"("+buyingAssetIssuer+")"+"卖出"+num+sellingAssetCode+"("+sellingAssetIssuer+")";
+            String notify = String.format(template, time, type, sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode);
 
             Set<String> subscribers = mappingService.getSubscribers(sourceAccount);
 
