@@ -4,13 +4,13 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
 
-public class QqBinding implements Serializable {
+public class Binding implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int id;
 
     @NotEmpty
-    private String qqId;
+    private String imId;
 
     @NotEmpty
     private String accountId;
@@ -19,21 +19,21 @@ public class QqBinding implements Serializable {
 
 
 
-    public QqBinding(@NotEmpty String qqId, @NotEmpty String accountId) {
-        this.qqId = qqId;
+    public Binding(@NotEmpty String imId, @NotEmpty String accountId) {
+        this.imId = imId;
         this.accountId = accountId;
         this.isEnabled = 1;
     }
 
-    public QqBinding(@NotEmpty String qqId, @NotEmpty String accountId, int isEnabled) {
-        this.qqId = qqId;
+    public Binding(@NotEmpty String imId, @NotEmpty String accountId, int isEnabled) {
+        this.imId = imId;
         this.accountId = accountId;
         this.isEnabled = isEnabled;
     }
 
-    public QqBinding(int id, @NotEmpty String qqId, @NotEmpty String accountId, boolean isEnabled) {
+    public Binding(int id, @NotEmpty String imId, @NotEmpty String accountId, boolean isEnabled) {
         this.id = id;
-        this.qqId = qqId;
+        this.imId = imId;
         this.accountId = accountId;
         this.isEnabled = isEnabled?1:0;
     }
@@ -46,12 +46,12 @@ public class QqBinding implements Serializable {
         this.id = id;
     }
 
-    public String getQqId() {
-        return qqId;
+    public String getImId() {
+        return imId;
     }
 
-    public void setQqId(String qqId) {
-        this.qqId = qqId;
+    public void setImId(String imId) {
+        this.imId = imId;
     }
 
     public String getAccountId() {

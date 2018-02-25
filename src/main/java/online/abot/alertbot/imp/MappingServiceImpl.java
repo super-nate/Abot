@@ -1,7 +1,7 @@
 package online.abot.alertbot.imp;
 
-import online.abot.alertbot.domian.QqBinding;
-import online.abot.alertbot.mapper.QqBindingMapper;
+import online.abot.alertbot.domian.Binding;
+import online.abot.alertbot.mapper.BindingMapper;
 import online.abot.alertbot.service.MappingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,30 +11,30 @@ import java.util.*;
 @Service
 public class MappingServiceImpl implements MappingService {
     @Autowired
-    QqBindingMapper qqBindingMapper;
+    BindingMapper bindingMapper;
 
     //accountid as key, list of subscribers like qqid, as value
     private Map<String, Set<String>> subscribersMap = new HashMap<>();
 
     @PostConstruct
     void init(){
-        List<QqBinding> qqBindings= qqBindingMapper.findAll();
-        for(QqBinding qqBinding: qqBindings){
-            addNewMapping(qqBinding);
+        List<Binding> bindings = bindingMapper.findAll();
+        for(Binding binding : bindings){
+            addNewMapping(binding);
         }
     }
 
 
     @Override
-    public void addNewMapping(QqBinding qqBinding) {
-        String accountId = qqBinding.getAccountId();
-        String qqId = qqBinding.getQqId();
+    public void addNewMapping(Binding binding) {
+        String accountId = binding.getAccountId();
+        String imId = binding.getImId();
         Set<String> subscribersSet = subscribersMap.get(accountId);
         if (subscribersSet==null||subscribersSet.size()==0){
             subscribersSet = new HashSet<>();
             subscribersMap.put(accountId, subscribersSet);
         }
-        subscribersSet.add(qqId);
+        subscribersSet.add(imId);
     }
 
     @Override

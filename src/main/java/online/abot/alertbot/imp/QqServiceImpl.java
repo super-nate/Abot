@@ -5,10 +5,11 @@ import com.scienjus.smartqq.client.SmartQQClient;
 import com.scienjus.smartqq.model.DiscussMessage;
 import com.scienjus.smartqq.model.GroupMessage;
 import com.scienjus.smartqq.model.Message;
-import online.abot.alertbot.domian.QqBinding;
-import online.abot.alertbot.mapper.QqBindingMapper;
+import online.abot.alertbot.constant.Constants;
+import online.abot.alertbot.domian.Binding;
+import online.abot.alertbot.mapper.BindingMapper;
 import online.abot.alertbot.service.MappingService;
-import online.abot.alertbot.service.QqService;
+import online.abot.alertbot.service.ImService;
 import online.abot.alertbot.service.StellarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 
 @Service
-public class QqServiceImpl implements QqService {
+public class QqServiceImpl implements ImService {
+
+
 
     private SmartQQClient client = null;
 
@@ -27,7 +30,7 @@ public class QqServiceImpl implements QqService {
     MappingService mappingService;
 
     @Autowired
-    QqBindingMapper qqBindingMapper;
+    BindingMapper bindingMapper;
 
     @PostConstruct
     private void init() {
@@ -37,10 +40,10 @@ public class QqServiceImpl implements QqService {
             public void onMessage(Message message, SmartQQClient client) {
                 String accountId = message.getContent();
                 String qqId = String.valueOf(message.getUserId());//TODO return
-
                 if ("3269075003".equals(qqId)){
                     return;
                 }
+                qqId = Constants.QQ_PREFIX + qqId;
                 boolean result = subscribe(qqId, accountId);
                 if (result) {
                     client.sendMessageToFriend(message.getUserId(), "绑定成功！");
@@ -66,11 +69,11 @@ public class QqServiceImpl implements QqService {
     @Override
     public boolean subscribe(String qqId, String accountId) {
         accountId = accountId.replace(" ", "");
-        QqBinding qqBinding = new QqBinding(qqId, accountId);
+        Binding binding = new Binding(qqId, accountId);
         try {
-            qqBindingMapper.insertQQBinding(qqBinding);
-            mappingService.addNewMapping(qqBinding);
-            stellarService.subscribe(qqBinding);
+            bindingMapper.insertQQBinding(binding);
+            mappingService.addNewMapping(binding);
+            stellarService.subscribe(binding);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

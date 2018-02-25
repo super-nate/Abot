@@ -1,9 +1,9 @@
 package online.abot.alertbot.service;
 
 
-import online.abot.alertbot.domian.QqBinding;
+import online.abot.alertbot.domian.Binding;
 
 //To listen to the stellar horizon
 public interface StellarService {
-        boolean subscribe(QqBinding qqBinding);
+        boolean subscribe(Binding binding);
 }

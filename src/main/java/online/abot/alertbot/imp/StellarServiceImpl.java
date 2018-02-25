@@ -2,10 +2,11 @@ package online.abot.alertbot.imp;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import online.abot.alertbot.domian.QqBinding;
-import online.abot.alertbot.mapper.QqBindingMapper;
+import online.abot.alertbot.constant.Constants;
+import online.abot.alertbot.domian.Binding;
+import online.abot.alertbot.mapper.BindingMapper;
 import online.abot.alertbot.service.MappingService;
-import online.abot.alertbot.service.QqService;
+import online.abot.alertbot.service.ImService;
 import online.abot.alertbot.service.StellarService;
 import org.glassfish.jersey.media.sse.EventListener;
 import org.glassfish.jersey.media.sse.EventSource;
@@ -18,22 +19,19 @@ import javax.annotation.PostConstruct;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.sse.InboundSseEvent;
-import javax.ws.rs.sse.SseEventSource;
-import java.util.List;
 import java.util.Set;
 
 @Service
 public class StellarServiceImpl implements StellarService {
 
     @Autowired
-    QqService qqService;
+    ImService imService;
 
     @Autowired
     MappingService mappingService;
 
     @Autowired
-    QqBindingMapper qqBindingMapper;
+    BindingMapper bindingMapper;
 
 
     @PostConstruct
@@ -54,9 +52,9 @@ public class StellarServiceImpl implements StellarService {
 
 
     @Override
-    public boolean subscribe(QqBinding qqBinding) {
+    public boolean subscribe(Binding binding) {
        /* try {
-            String accountId = qqBinding.getAccountId();
+            String accountId = binding.getAccountId();
             Client client = ClientBuilder.newBuilder().build();
             String url = String.format("https://horizon.stellar.org/accounts/%s/payments?cursor=now", accountId);
             WebTarget target = client.target(url);
@@ -82,11 +80,14 @@ public class StellarServiceImpl implements StellarService {
         String type= jsonObj.getString("type");
 
         if ("payment".equals(type)){
-            String time = jsonObj.getString("created_at");
-            String txHash  = jsonObj.getString("transaction_hash");
             String sourceAccount = jsonObj.getString("source_account");
             String from = jsonObj.getString("from");
             String to = jsonObj.getString("to");
+            if(!(accounts.contains(sourceAccount)||accounts.contains(from)||accounts.contains(to))){
+                return;
+            }
+            String time = jsonObj.getString("created_at");
+            String txHash  = jsonObj.getString("transaction_hash");
             String assetType = jsonObj.getString("asset_type");
             String assetCode = "XLM";
             String assetIssuer = "stellar.org";
@@ -111,11 +112,20 @@ public class StellarServiceImpl implements StellarService {
             Set<String> subscribers1 = mappingService.getSubscribers(from);
             Set<String> subscribers2 = mappingService.getSubscribers(to);
 
-            subscribers.addAll(subscribers1);
-            subscribers.addAll(subscribers2);
+            if (subscribers1!=null){
+                subscribers.addAll(subscribers1);
+            }
+            if (subscribers2!=null){
+                subscribers.addAll(subscribers2);
+            }
 
-            for (String qqId: subscribers){
-                qqService.alert(qqId, notify);
+            for (String imId: subscribers){
+
+                if (imId.startsWith(Constants.QQ_PREFIX)) {
+                    imId=imId.substring(3);
+                    imService.alert(imId, notify);
+                }
+
             }
 
 
@@ -124,13 +134,12 @@ public class StellarServiceImpl implements StellarService {
         }
 
         if ("manage_offer".equals(type)){
-            String time = jsonObj.getString("created_at");
-            String txHash  = jsonObj.getString("transaction_hash");
             String sourceAccount = jsonObj.getString("source_account");
             if(!accounts.contains(sourceAccount)){
                 return;
             }
-
+            String time = jsonObj.getString("created_at");
+            String txHash  = jsonObj.getString("transaction_hash");
             String buyingAssetType = jsonObj.getString("buying_asset_type");
             String buyingAssetCode = "XLM";
             String buyingAssetIssuer = "stellar.org";
@@ -159,15 +168,19 @@ public class StellarServiceImpl implements StellarService {
                     "资金账户：%s\n" +
                     "卖出：%s %s（%s）\n" +
                     "买入：%s %s（%s）\n" +
-                    "价格：1 %s=%s %s";
+                    "价格：1 %s=%s %s"+
+                    "交易哈希：%s";
 
             //String notify = "账号"+sourceAccount+ "以价格"+price+buyingAssetCode+"("+buyingAssetIssuer+")"+"卖出"+num+sellingAssetCode+"("+sellingAssetIssuer+")";
-            String notify = String.format(template, time, type, sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode);
+            String notify = String.format(template, time, type, sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode, txHash);
 
             Set<String> subscribers = mappingService.getSubscribers(sourceAccount);
 
-            for (String qqId: subscribers){
-                qqService.alert(qqId, notify);
+            for (String imId: subscribers){
+                if (imId.startsWith(Constants.QQ_PREFIX)) {
+                    imId=imId.substring(3);
+                    imService.alert(imId, notify);
+                }
             }
 
             System.out.println("notify: " + notify);
