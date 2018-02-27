@@ -12,6 +12,7 @@ import online.abot.alertbot.mapper.BindingMapper;
 import online.abot.alertbot.service.MappingService;
 import online.abot.alertbot.service.ImService;
 import online.abot.alertbot.service.StellarService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ import java.util.Map;
 @Service
 public class QqServiceImpl implements ImService {
 
-
+    private static final Logger LOGGER = Logger.getLogger(QqServiceImpl.class);
 
     private SmartQQClient client = null;
 

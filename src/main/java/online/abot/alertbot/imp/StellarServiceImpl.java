@@ -8,6 +8,7 @@ import online.abot.alertbot.mapper.BindingMapper;
 import online.abot.alertbot.service.MappingService;
 import online.abot.alertbot.service.ImService;
 import online.abot.alertbot.service.StellarService;
+import org.apache.log4j.Logger;
 import org.glassfish.jersey.media.sse.EventListener;
 import org.glassfish.jersey.media.sse.EventSource;
 import org.glassfish.jersey.media.sse.InboundEvent;
@@ -23,6 +24,8 @@ import java.util.Set;
 
 @Service
 public class StellarServiceImpl implements StellarService {
+
+    private static final Logger LOGGER = Logger.getLogger(StellarServiceImpl.class);
 
     @Autowired
     ImService imService;
@@ -102,11 +105,18 @@ public class StellarServiceImpl implements StellarService {
                     "资金账户：%s\n" +
                     "接受账户：%s\n" +
                     "金额：%s %s（%s）\n"+
-                    "交易哈希：%s";
+                    "交易哈希：%s \n"+
+                    "---------------- \n"+
+                    "time: %s\n" +
+                    "type: %s\n" +
+                    "from：%s\n" +
+                    "to：%s\n" +
+                    "amount: %s %s（%s）\n"+
+                    "txhash: %s";
 
             //String notify = "账号"+from+ "发送"+num+assetCode+"("+assetIssuer+")"+"到账号"+to;
 
-            String notify = String.format(template, time, type, from, to, num, assetCode, assetIssuer, txHash);
+            String notify = String.format(template, time, type, from, to, num, assetCode, assetIssuer, txHash, time, type, from, to, num, assetCode, assetIssuer, txHash);
 
             Set<String> subscribers = mappingService.getSubscribers(sourceAccount);
             Set<String> subscribers1 = mappingService.getSubscribers(from);
@@ -128,8 +138,8 @@ public class StellarServiceImpl implements StellarService {
 
             }
 
-
-            System.out.println("notify: " + notify);
+            LOGGER.info(notify);
+            //System.out.println("notify: " + notify);
 
         }
 
@@ -169,10 +179,18 @@ public class StellarServiceImpl implements StellarService {
                     "卖出：%s %s（%s）\n" +
                     "买入：%s %s（%s）\n" +
                     "价格：1 %s=%s %s \n"+
-                    "交易哈希：%s";
+                    "交易哈希：%s \n"+
+                    "---------------- \n"+
+                    "time: %s\n" +
+                    "type: %s\n" +
+                    "source: %s\n" +
+                    "sell: %s %s（%s）\n" +
+                    "buy: %s %s（%s）\n" +
+                    "price: 1 %s=%s %s \n"+
+                    "txhash: %s";
 
             //String notify = "账号"+sourceAccount+ "以价格"+price+buyingAssetCode+"("+buyingAssetIssuer+")"+"卖出"+num+sellingAssetCode+"("+sellingAssetIssuer+")";
-            String notify = String.format(template, time, type, sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode, txHash);
+            String notify = String.format(template, time, type, sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode, txHash, time, type, sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode, txHash);
 
             Set<String> subscribers = mappingService.getSubscribers(sourceAccount);
 
@@ -183,7 +201,8 @@ public class StellarServiceImpl implements StellarService {
                 }
             }
 
-            System.out.println("notify: " + notify);
+            LOGGER.info(notify);
+            //System.out.println("notify: " + notify);
 
         }
 

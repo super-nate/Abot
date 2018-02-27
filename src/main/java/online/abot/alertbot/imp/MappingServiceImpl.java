@@ -1,8 +1,10 @@
 package online.abot.alertbot.imp;
 
+import com.scienjus.smartqq.client.SmartQQClient;
 import online.abot.alertbot.domian.Binding;
 import online.abot.alertbot.mapper.BindingMapper;
 import online.abot.alertbot.service.MappingService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,10 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 @Service
 public class MappingServiceImpl implements MappingService {
+    //日志
+    private static final Logger LOGGER = Logger.getLogger(MappingServiceImpl.class);
+
+
     @Autowired
     BindingMapper bindingMapper;
 
