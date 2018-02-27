@@ -3,6 +3,7 @@ package online.abot.alertbot.imp;
 import com.scienjus.smartqq.callback.MessageCallback;
 import com.scienjus.smartqq.client.SmartQQClient;
 import com.scienjus.smartqq.model.DiscussMessage;
+import com.scienjus.smartqq.model.Friend;
 import com.scienjus.smartqq.model.GroupMessage;
 import com.scienjus.smartqq.model.Message;
 import online.abot.alertbot.constant.Constants;
@@ -15,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class QqServiceImpl implements ImService {
@@ -22,6 +26,8 @@ public class QqServiceImpl implements ImService {
 
 
     private SmartQQClient client = null;
+
+    private Map<String, Long> qqNameToUidMap = new HashMap();
 
     @Autowired
     StellarService stellarService;
@@ -39,12 +45,16 @@ public class QqServiceImpl implements ImService {
             @Override
             public void onMessage(Message message, SmartQQClient client) {
                 String accountId = message.getContent();
-                String qqId = String.valueOf(message.getUserId());//TODO return
-                if ("3269075003".equals(qqId)){
+                long uid = message.getUserId();//TODO return
+                if (3269075003L == uid){
                     return;
                 }
-                qqId = Constants.QQ_PREFIX + qqId;
-                boolean result = subscribe(qqId, accountId);
+
+                String qqName = client.getFriendInfo(uid).getNick();
+                qqNameToUidMap.put(qqName,uid);
+                qqName = Constants.QQ_PREFIX + qqName;
+
+                boolean result = subscribe(qqName, accountId);
                 if (result) {
                     client.sendMessageToFriend(message.getUserId(), "绑定成功！");
                 } else {
@@ -63,13 +73,19 @@ public class QqServiceImpl implements ImService {
             }
         });
 
+        List<Friend> friendList = client.getFriendList();
+        for (Friend friend:friendList){
+            String qqName = friend.getNickname();
+            qqNameToUidMap.put(qqName,friend.getUserId());
+        }
+
     }
 
 
     @Override
-    public boolean subscribe(String qqId, String accountId) {
+    public boolean subscribe(String qqName, String accountId) {
         accountId = accountId.replace(" ", "");
-        Binding binding = new Binding(qqId, accountId);
+        Binding binding = new Binding(qqName, accountId);
         try {
             bindingMapper.insertQQBinding(binding);
             mappingService.addNewMapping(binding);
@@ -82,9 +98,10 @@ public class QqServiceImpl implements ImService {
     }
 
     @Override
-    public boolean alert(String qqId, String message) {
+    public boolean alert(String qqName, String message) {
         try{
-            client.sendMessageToFriend(Long.valueOf(qqId),  message);
+            long uid = qqNameToUidMap.get(qqName);
+            client.sendMessageToFriend(uid,  message);
         }catch (Exception e){
             e.printStackTrace();
         }

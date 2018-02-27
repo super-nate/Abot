@@ -37,6 +37,10 @@ public class Application {
             System.out.println(category.getName());
             for (Friend friend : category.getFriends()) {
                 System.out.println("————" + friend.getNickname());
+                UserInfo info=client.getFriendInfo(friend.getUserId());
+                //long qqId = client.getQQById(friend);
+
+                System.out.println("————" + info);
             }
         }
         //使用后调用close方法关闭，你也可以使用try-with-resource创建该对象并自动关闭

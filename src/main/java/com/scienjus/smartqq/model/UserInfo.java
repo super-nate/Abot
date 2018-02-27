@@ -202,4 +202,28 @@ public class UserInfo {
         this.mobile = mobile;
     }
 
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "birthday=" + birthday +
+                ", phone='" + phone + '\'' +
+                ", occupation='" + occupation + '\'' +
+                ", college='" + college + '\'' +
+                ", uin='" + uin + '\'' +
+                ", blood=" + blood +
+                ", lnick='" + lnick + '\'' +
+                ", homepage='" + homepage + '\'' +
+                ", vipInfo=" + vipInfo +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", province='" + province + '\'' +
+                ", personal='" + personal + '\'' +
+                ", shengxiao=" + shengxiao +
+                ", nick='" + nick + '\'' +
+                ", email='" + email + '\'' +
+                ", account='" + account + '\'' +
+                ", gender='" + gender + '\'' +
+                ", mobile='" + mobile + '\'' +
+                '}';
+    }
 }

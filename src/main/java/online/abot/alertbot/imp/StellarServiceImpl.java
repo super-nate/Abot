@@ -168,7 +168,7 @@ public class StellarServiceImpl implements StellarService {
                     "资金账户：%s\n" +
                     "卖出：%s %s（%s）\n" +
                     "买入：%s %s（%s）\n" +
-                    "价格：1 %s=%s %s"+
+                    "价格：1 %s=%s %s \n"+
                     "交易哈希：%s";
 
             //String notify = "账号"+sourceAccount+ "以价格"+price+buyingAssetCode+"("+buyingAssetIssuer+")"+"卖出"+num+sellingAssetCode+"("+sellingAssetIssuer+")";
