@@ -119,6 +119,12 @@
 			<artifactId>jersey-media-moxy</artifactId>
 			<version>2.26</version>
 		</dependency>
+		<dependency>
+			<groupId>org.telegram</groupId>
+			<artifactId>telegrambots</artifactId>
+			<version>3.6</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

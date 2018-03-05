@@ -14,6 +14,7 @@ import org.glassfish.jersey.media.sse.EventSource;
 import org.glassfish.jersey.media.sse.InboundEvent;
 import org.glassfish.jersey.media.sse.SseFeature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -28,7 +29,8 @@ public class StellarServiceImpl implements StellarService {
     private static final Logger LOGGER = Logger.getLogger(StellarServiceImpl.class);
 
     @Autowired
-    ImService imService;
+    @Qualifier("QqService")
+    ImService qqService;
 
     @Autowired
     MappingService mappingService;
@@ -133,7 +135,7 @@ public class StellarServiceImpl implements StellarService {
 
                 if (imId.startsWith(Constants.QQ_PREFIX)) {
                     imId=imId.substring(3);
-                    imService.alert(imId, notify);
+                    qqService.alert(imId, notify);
                 }
 
             }
@@ -197,7 +199,7 @@ public class StellarServiceImpl implements StellarService {
             for (String imId: subscribers){
                 if (imId.startsWith(Constants.QQ_PREFIX)) {
                     imId=imId.substring(3);
-                    imService.alert(imId, notify);
+                    qqService.alert(imId, notify);
                 }
             }
 

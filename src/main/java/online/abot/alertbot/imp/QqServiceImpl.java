@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
+@Service("QqService")
 public class QqServiceImpl implements ImService {
 
     private static final Logger LOGGER = Logger.getLogger(QqServiceImpl.class);
@@ -39,7 +39,7 @@ public class QqServiceImpl implements ImService {
     @Autowired
     BindingMapper bindingMapper;
 
-    @PostConstruct
+    /*@PostConstruct
     private void init() {
 
         client = new SmartQQClient(new MessageCallback() {
@@ -81,7 +81,7 @@ public class QqServiceImpl implements ImService {
         }
 
     }
-
+*/
 
     @Override
     public boolean subscribe(String qqName, String accountId) {
