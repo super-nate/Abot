@@ -33,6 +33,10 @@ public class StellarServiceImpl implements StellarService {
     ImService qqService;
 
     @Autowired
+    @Qualifier("TelegramService")
+    ImService telegramService;
+
+    @Autowired
     MappingService mappingService;
 
     @Autowired
@@ -138,6 +142,11 @@ public class StellarServiceImpl implements StellarService {
                     qqService.alert(imId, notify);
                 }
 
+                if (imId.startsWith(Constants.TL_PREFIX)) {
+                    imId=imId.substring(3);
+                    telegramService.alert(imId, notify);
+                }
+
             }
 
             LOGGER.info(notify);
@@ -200,6 +209,10 @@ public class StellarServiceImpl implements StellarService {
                 if (imId.startsWith(Constants.QQ_PREFIX)) {
                     imId=imId.substring(3);
                     qqService.alert(imId, notify);
+                }
+                if (imId.startsWith(Constants.TL_PREFIX)) {
+                    imId=imId.substring(3);
+                    telegramService.alert(imId, notify);
                 }
             }
 

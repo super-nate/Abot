@@ -17,12 +17,12 @@ public interface BindingMapper {
     List<Binding> findAll();
 
     @Insert("insert into binding(im_id,account_id,is_enabled) values(#{imId},#{accountId},#{isEnabled})")
-    void insertQQBinding(Binding binding);
+    void insertBinding(Binding binding);
 
     @Delete("delete from binding where im_id =#{im_id} and account_id= #{account_id}")
-    void deleteQQBinding(@Param("im_id") String imId, @Param("account_id") String accountId);
+    void deleteBinding(@Param("im_id") String imId, @Param("account_id") String accountId);
 
     @Update("update binding set is_enabled=#{is_enabled} where im_id =#{im_id} and account_id= #{account_id}")
-    void updateQQBindingStatus(Binding binding);
+    void updateBindingStatus(Binding binding);
 
 }

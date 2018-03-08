@@ -115,7 +115,8 @@ public class SmartQQClient implements Closeable {
         //本地存储二维码图片
         String filePath;
         try {
-            filePath = new File("qrcode.png").getCanonicalPath();
+            filePath = new File("/root/stellar/qrcode.png").getCanonicalPath();
+            //filePath = new File("qrcode.png").getCanonicalPath();
         } catch (IOException e) {
             throw new IllegalStateException("二维码保存失败");
         }

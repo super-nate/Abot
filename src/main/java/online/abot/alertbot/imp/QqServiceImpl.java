@@ -39,7 +39,7 @@ public class QqServiceImpl implements ImService {
     @Autowired
     BindingMapper bindingMapper;
 
-    /*@PostConstruct
+    @PostConstruct
     private void init() {
 
         client = new SmartQQClient(new MessageCallback() {
@@ -57,9 +57,9 @@ public class QqServiceImpl implements ImService {
 
                 boolean result = subscribe(qqName, accountId);
                 if (result) {
-                    client.sendMessageToFriend(message.getUserId(), "绑定成功！");
+                    client.sendMessageToFriend(message.getUserId(), "Bind successfully! \n绑定成功！");
                 } else {
-                    client.sendMessageToFriend(message.getUserId(), "请确认您输入的是恒星账号！");
+                    client.sendMessageToFriend(message.getUserId(), "Please make sure you have input your stellar account! \n请确认您输入的是恒星账号！");
                 }
             }
 
@@ -81,14 +81,13 @@ public class QqServiceImpl implements ImService {
         }
 
     }
-*/
 
     @Override
     public boolean subscribe(String qqName, String accountId) {
         accountId = accountId.replace(" ", "");
         Binding binding = new Binding(qqName, accountId);
         try {
-            bindingMapper.insertQQBinding(binding);
+            bindingMapper.insertBinding(binding);
             mappingService.addNewMapping(binding);
             stellarService.subscribe(binding);
         } catch (Exception e) {
