@@ -154,7 +154,7 @@ public class StellarServiceImpl implements StellarService {
                 assetIssuer=jsonObj.getString("asset_issuer");
             }
 
-            String template = "时间(伦敦):%s\n" +
+            String template = "时间（伦敦）：%s\n" +
                     "类型：%s\n" +
                     "资金账户：%s\n" +
                     "接受账户：%s\n" +
@@ -315,19 +315,18 @@ public class StellarServiceImpl implements StellarService {
         double bAmount = Double.valueOf(baseAmount);
         double price = cAmount/bAmount;
 
-        String template = "时间（伦敦）：%s\n" +
-                "类型：%s\n" +
-                "详情：\n" +
-                "交易账户 %s 卖出 %s %s（%s）买入 %s %s（%s），价格为1 %s=%s %s \n" + // 账户xxx卖出5xlm（stellar.org）买入10CNY（ripplefox），价格为1xml=2CNY
-                "交易账户 %s 卖出 %s %s（%s）买入 %s %s（%s），价格为1 %s=%s %s \n" +
-                "---------------- \n"+
-                "time(London): %s\n" +
-                "type: %s\n" +
-                "detail: \n" +
-                "account %s sell %s %s（%s）buy %s %s（%s） at price 1 %s=%s %s \n" +
-                "account %s sell %s %s（%s）buy %s %s（%s） at price 1 %s=%s %s \n";
+        String template =
+                "账户%s卖出%s %s（%s）买入%s %s（%s），价格：1 %s=%s %s\n" + // 账户xxx卖出5xlm（stellar.org）买入10CNY（ripplefox），价格为1xml=2CNY
+                "账户%s卖出%s %s（%s）买入%s %s（%s），价格：1 %s=%s %s\n" +
+                "伦敦时间 London time: %s\n" +
+                "类型 type: %s\n" +
+                "account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s=%s %s\n" +
+                "account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s=%s %s\n";
 
-        String notify = String.format(template, time, "挂单成交",
+        String notify = String.format(template, /*time, "挂单成交",*/
+                baseAccount, baseAmount, baseAssetCode, baseAssetIssuer, counterAmount, counterAssetCode, counterAssetIssuer, baseAssetCode, price, counterAssetCode,
+                counterAccount, counterAmount, counterAssetCode, counterAssetIssuer, baseAmount, baseAssetCode, baseAssetIssuer, counterAssetCode, 1/price, baseAssetCode,
+                time, "成交 trade",
                 baseAccount, baseAmount, baseAssetCode, baseAssetIssuer, counterAmount, counterAssetCode, counterAssetIssuer, baseAssetCode, price, counterAssetCode,
                 counterAccount, counterAmount, counterAssetCode, counterAssetIssuer, baseAmount, baseAssetCode, baseAssetIssuer, counterAssetCode, 1/price, baseAssetCode);
 
@@ -339,9 +338,9 @@ public class StellarServiceImpl implements StellarService {
             subscribers.addAll(subscribers1);
         }
         if (subscribers2!=null){
-            subscribers.addAll(subscribers1);
+            subscribers.addAll(subscribers2);
         }
-
+        LOGGER.info("subscribers: " + subscribers);
         for (String imId: subscribers){
             if (imId.startsWith(Constants.QQ_PREFIX)) {
                 imId=imId.substring(3);
