@@ -1,6 +1,5 @@
 package online.abot.alertbot.imp;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import online.abot.alertbot.constant.Constants;
@@ -10,10 +9,6 @@ import online.abot.alertbot.service.MappingService;
 import online.abot.alertbot.service.ImService;
 import online.abot.alertbot.service.StellarService;
 import org.apache.log4j.Logger;
-import org.glassfish.jersey.media.sse.EventListener;
-import org.glassfish.jersey.media.sse.EventSource;
-import org.glassfish.jersey.media.sse.InboundEvent;
-import org.glassfish.jersey.media.sse.SseFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -24,10 +19,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
 import javax.annotation.PostConstruct;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,6 +28,7 @@ public class StellarServiceImpl implements StellarService {
     private static final Logger LOGGER = Logger.getLogger(StellarServiceImpl.class);
     private static final String TRADES_URL = "https://horizon.stellar.org/trades?cursor=%s&limit=200";
 
+    private static final String OPERATIONS_URL = "https://horizon.stellar.org/operations?cursor=%s&limit=200";
     @Autowired
     @Qualifier("QqService")
     ImService qqService;
@@ -53,7 +45,9 @@ public class StellarServiceImpl implements StellarService {
 
     private final RestTemplate restTemplate;
 
-    private String cursor;
+    private String operationsCursor;
+
+    private String tradesCursor;
 
     public StellarServiceImpl(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
@@ -63,6 +57,7 @@ public class StellarServiceImpl implements StellarService {
 
     @PostConstruct
     private void init(){
+/*
         Client client = ClientBuilder.newBuilder()
                 .register(SseFeature.class).build();
         WebTarget target = client.target("https://horizon.stellar.org/operations?cursor=now");
@@ -75,9 +70,21 @@ public class StellarServiceImpl implements StellarService {
         };
         eventSource.register(listener);
         eventSource.open();
+*/
+        if(operationsCursor ==null){
+            String cursorUrl="https://horizon.stellar.org/operations?limit=1&order=desc";
+            String result = restTemplate.getForObject(cursorUrl, String.class);
+            //LOGGER.info("First trade: " + result);
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            JSONObject embedded = jsonObject.getJSONObject("_embedded");
+            JSONArray records = embedded.getJSONArray("records");
+            JSONObject trade = (JSONObject)records.get(0);
+            operationsCursor = trade.getString("paging_token");
+            //LOGGER.info("Cursor: " + tradesCursor);
+        }
 
 
-        if(cursor==null){
+        if(tradesCursor ==null){
             String cursorUrl="https://horizon.stellar.org/trades?limit=1&order=desc";
             String result = restTemplate.getForObject(cursorUrl, String.class);
             //LOGGER.info("First trade: " + result);
@@ -85,14 +92,14 @@ public class StellarServiceImpl implements StellarService {
             JSONObject embedded = jsonObject.getJSONObject("_embedded");
             JSONArray records = embedded.getJSONArray("records");
             JSONObject trade = (JSONObject)records.get(0);
-            cursor = trade.getString("paging_token");
-            //LOGGER.info("Cursor: " + cursor);
+            tradesCursor = trade.getString("paging_token");
+            //LOGGER.info("Cursor: " + tradesCursor);
         }
     }
 
-    @Scheduled(fixedRate = 3000)
+    @Scheduled(fixedRate = 5000)
     public void getTrades() {
-        String requestUrl = String.format(TRADES_URL, cursor);
+        String requestUrl = String.format(TRADES_URL, tradesCursor);
         //LOGGER.info(requestUrl);
         String result = restTemplate.getForObject(requestUrl, String.class);
         //System.out.println("result: " + result);
@@ -100,11 +107,28 @@ public class StellarServiceImpl implements StellarService {
         JSONObject embedded = jsonObject.getJSONObject("_embedded");
         JSONArray records = embedded.getJSONArray("records");
         if (records!=null&&records.size()!=0) {
-            JSONObject trade = (JSONObject) records.get(0);
-            cursor = trade.getString("paging_token");//get the newest cursor
-            LOGGER.info("Cursor: " + cursor);
+            JSONObject trade = (JSONObject) records.get(records.size()-1);
+            tradesCursor = trade.getString("paging_token");//get the newest tradesCursor
+            //LOGGER.info("tradesCursor: " + tradesCursor);
         }
-        Flux.fromIterable(records).subscribeOn(Schedulers.elastic()).subscribe(this::handleTradesData);
+        Flux.fromIterable(records).subscribeOn(Schedulers.elastic()).subscribe(this::handleTradeData);
+    }
+
+    @Scheduled(fixedRate = 3000)
+    public void getOperations() {
+        String requestUrl = String.format(OPERATIONS_URL, operationsCursor);
+        //LOGGER.info(requestUrl);
+        String result = restTemplate.getForObject(requestUrl, String.class);
+        //System.out.println("result: " + result);
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        JSONObject embedded = jsonObject.getJSONObject("_embedded");
+        JSONArray records = embedded.getJSONArray("records");
+        if (records!=null&&records.size()!=0) {
+            JSONObject operation = (JSONObject) records.get(records.size()-1);
+            operationsCursor = operation.getString("paging_token");//get the newest tradesCursor
+            //LOGGER.info("operationsCursor: " + operationsCursor);
+        }
+        Flux.fromIterable(records).subscribeOn(Schedulers.elastic()).subscribe(this::handleOperationData);
     }
 
 
@@ -126,13 +150,11 @@ public class StellarServiceImpl implements StellarService {
         return true;
     }
 
-    public void dataHandling(String data){
+    public void handleOperationData(Object object){
         Set<String> accounts = mappingService.getAccounts();
+        JSONObject jsonObj = (JSONObject)object;
 
-        if (data.contains("hello")) { //TODO contains hello
-            return;
-        }
-        JSONObject jsonObj = JSON.parseObject(data);
+        //LOGGER.info("jsonObj: "+jsonObj);
 
         String type= jsonObj.getString("type");
 
@@ -197,7 +219,7 @@ public class StellarServiceImpl implements StellarService {
 
             }
 
-            LOGGER.info(notify);
+            LOGGER.info("\n"+notify);
             //System.out.println("notify: " + notify);
 
         }
@@ -264,7 +286,7 @@ public class StellarServiceImpl implements StellarService {
                 }
             }
 
-            LOGGER.info(notify);
+            LOGGER.info("\n"+notify);
             //System.out.println("notify: " + notify);
 
         }
@@ -272,7 +294,7 @@ public class StellarServiceImpl implements StellarService {
 
     }
 
-    public void handleTradesData(Object object){
+    public void handleTradeData(Object object){
         Set<String> accounts = mappingService.getAccounts();
 
         //System.out.println(Thread.currentThread().getName() + ": inside: " + object);
@@ -284,7 +306,7 @@ public class StellarServiceImpl implements StellarService {
             return;
         }
 
-        LOGGER.info("trade: " + object);
+        //LOGGER.info("trade: " + object);
 
         String time = jsonObj.getString("ledger_close_time");
         String id  = jsonObj.getString("id");
@@ -352,7 +374,7 @@ public class StellarServiceImpl implements StellarService {
             }
         }
 
-        LOGGER.info(notify);
+        LOGGER.info("\n"+notify);
 
     }
 
