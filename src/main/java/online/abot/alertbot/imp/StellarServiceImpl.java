@@ -190,15 +190,15 @@ public class StellarServiceImpl implements StellarService {
                     "amount: %s %s（%s）\n"+
                     "txhash: %s";*/
 
-            String template = "时间（伦敦）：%s\n" +
-                    "类型：%s\n" +
+            String template = "类型：%s\n" +
+                    "时间（伦敦）：%s\n" +
                     "资金账户：%s\n" +
                     "接受账户：%s\n" +
                     "金额：%s %s（%s）\n"+
                     "交易哈希：%s \n";
 
-            String templateEn = "time(London): %s\n" +
-                    "type: %s\n" +
+            String templateEn = "type: %s\n" +
+                    "time(London): %s\n" +
                     "from：%s\n" +
                     "to：%s\n" +
                     "amount: %s %s（%s）\n"+
@@ -206,8 +206,8 @@ public class StellarServiceImpl implements StellarService {
 
             //String notify = "账号"+from+ "发送"+num+assetCode+"("+assetIssuer+")"+"到账号"+to;
 
-            String notify = String.format(template, time, "转账", from, to, num, assetCode, assetIssuer, txHash);
-            String notifyEn = String.format(templateEn, time, type, from, to, num, assetCode, assetIssuer, txHash);
+            String notify = String.format(template, "转账",time,  from, to, num, assetCode, assetIssuer, txHash);
+            String notifyEn = String.format(templateEn, type,time, from, to, num, assetCode, assetIssuer, txHash);
             Set<String> subscribers = mappingService.getSubscribers(sourceAccount);
             Set<String> subscribers1 = mappingService.getSubscribers(from);
             Set<String> subscribers2 = mappingService.getSubscribers(to);
@@ -286,25 +286,25 @@ public class StellarServiceImpl implements StellarService {
                     "buy: %s %s（%s）\n" +
                     "price: 1 %s=%s %s \n"+
                     "txhash: %s";*/
-            String template = "时间（伦敦）：%s\n" +
-                    "类型：%s\n" +
+            String template = "类型：%s\n" +
+                    "时间（伦敦）：%s\n" +
                     "资金账户：%s\n" +
                     "卖出：%s %s（%s）\n" +
                     "买入：%s %s（%s）\n" +
                     "价格：1 %s=%s %s \n"+
                     "交易哈希：%s \n";
-            String templateEn=
+            String templateEn="type: %s\n" +
                     "time(London): %s\n" +
-                    "type: %s\n" +
                     "source: %s\n" +
                     "sell: %s %s（%s）\n" +
                     "buy: %s %s（%s）\n" +
                     "price: 1 %s=%s %s \n"+
                     "txhash: %s";
+            String typeZh = sellingNum==0.0?"撤单":"挂单";
 
             //String notify = "账号"+sourceAccount+ "以价格"+price+buyingAssetCode+"("+buyingAssetIssuer+")"+"卖出"+num+sellingAssetCode+"("+sellingAssetIssuer+")";
-            String notify = String.format(template, time, "挂单", sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode, txHash);
-            String notifyEn= String.format(templateEn, time, type, sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode, txHash);
+            String notify = String.format(template, typeZh,time,  sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode, txHash);
+            String notifyEn= String.format(templateEn, type,time,  sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode, txHash);
 
             Set<String> subscribers = mappingService.getSubscribers(sourceAccount);
 
@@ -390,20 +390,20 @@ public class StellarServiceImpl implements StellarService {
                 counterAccount, counterAmount, counterAssetCode, counterAssetIssuer, baseAmount, baseAssetCode, baseAssetIssuer, counterAssetCode, 1/price, baseAssetCode);*/
 
 
-        String template ="时间（伦敦）：%s\n" +
-                "类型：%s\n" +
+        String template ="类型：%s\n" +
+                "时间（伦敦）：%s\n" +
                 "账户%s卖出%s %s（%s）买入%s %s（%s），价格：1 %s=%s %s\n" + // 账户xxx卖出5xlm（stellar.org）买入10CNY（ripplefox），价格为1xml=2CNY
                 "账户%s卖出%s %s（%s）买入%s %s（%s），价格：1 %s=%s %s\n" ;
 
-        String templateEn = "time(London): %s\n" +
-                        "type: %s\n" +
-                        "account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s=%s %s\n" +
-                        "account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s=%s %s\n";
+        String templateEn = "type: %s\n" +
+                "time(London): %s\n" +
+                "account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s=%s %s\n" +
+                "account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s=%s %s\n";
 
-        String notify = String.format(template, time, "挂单成交",
+        String notify = String.format(template, "挂单成交",time,
                 baseAccount, baseAmount, baseAssetCode, baseAssetIssuer, counterAmount, counterAssetCode, counterAssetIssuer, baseAssetCode, price, counterAssetCode,
         counterAccount, counterAmount, counterAssetCode, counterAssetIssuer, baseAmount, baseAssetCode, baseAssetIssuer, counterAssetCode, 1/price, baseAssetCode);
-        String notifyEn = String.format(templateEn, time, "trade",
+        String notifyEn = String.format(templateEn, "trade",time,
                 baseAccount, baseAmount, baseAssetCode, baseAssetIssuer, counterAmount, counterAssetCode, counterAssetIssuer, baseAssetCode, price, counterAssetCode,
                 counterAccount, counterAmount, counterAssetCode, counterAssetIssuer, baseAmount, baseAssetCode, baseAssetIssuer, counterAssetCode, 1/price, baseAssetCode);
 
