@@ -54,7 +54,7 @@ public class QqServiceImpl implements ImService {
                 String qqName = client.getFriendInfo(uid).getNick();
                 qqNameToUidMap.put(qqName,uid);
                 qqName = Constants.QQ_PREFIX + qqName;
-                LOGGER.info("Telegram Message record: " + qqName + ": " + accountId);
+                LOGGER.info("QQ Message record: " + qqName + ": " + accountId);
                 boolean result = subscribe(qqName, accountId);
                 if (result) {
                     client.sendMessageToFriend(message.getUserId(), "Bind successfully! \n绑定成功！");
