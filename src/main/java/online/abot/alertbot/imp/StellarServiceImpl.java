@@ -218,8 +218,8 @@ public class StellarServiceImpl implements StellarService {
             if (subscribers2!=null){
                 subscribers.addAll(subscribers2);
             }
-
-            for (String imId: subscribers){
+            alert(subscribers, notify, notifyEn);
+            /*for (String imId: subscribers){
 
                 if (imId.startsWith(Constants.QQ_PREFIX)) {
                     imId=imId.substring(3);
@@ -233,10 +233,10 @@ public class StellarServiceImpl implements StellarService {
                     LOGGER.info("\n"+notifyEn);
                 }
 
-            }
+            }*/
 
-            LOGGER.info("\n"+notify);
-            LOGGER.info("\n"+notifyEn);
+            /*LOGGER.info("\n"+notify);
+            LOGGER.info("\n"+notifyEn);*/
 
 
         }
@@ -308,7 +308,8 @@ public class StellarServiceImpl implements StellarService {
 
             Set<String> subscribers = mappingService.getSubscribers(sourceAccount);
 
-            for (String imId: subscribers){
+            alert(subscribers, notify, notifyEn);
+            /*for (String imId: subscribers){
                 if (imId.startsWith(Constants.QQ_PREFIX)) {
                     imId=imId.substring(3);
                     qqService.alert(imId, notify);
@@ -319,10 +320,10 @@ public class StellarServiceImpl implements StellarService {
                     telegramService.alert(imId, notifyEn);
                     LOGGER.info("\n"+notifyEn);
                 }
-            }
+            }*/
 
-            LOGGER.info("\n"+notify);
-            LOGGER.info("\n"+notifyEn);
+           /* LOGGER.info("\n"+notify);
+            LOGGER.info("\n"+notifyEn);*/
 
 
         }
@@ -418,6 +419,26 @@ public class StellarServiceImpl implements StellarService {
         }
         //LOGGER.info("subscribers: " + subscribers);
 
+        alert(subscribers, notify, notifyEn);
+/*        for (String imId: subscribers){
+            if (imId.startsWith(Constants.QQ_PREFIX)) {
+                imId=imId.substring(3);
+                qqService.alert(imId, notify);
+                LOGGER.info("\n"+notify);
+            }
+            if (imId.startsWith(Constants.TL_PREFIX)) {
+                imId=imId.substring(3);
+                telegramService.alert(imId, notifyEn);
+                LOGGER.info("\n"+notifyEn);
+            }
+        }*/
+
+        /*LOGGER.info("\n"+notify);
+        LOGGER.info("\n"+notifyEn);*/
+
+    }
+
+    private void alert(Set<String> subscribers, String notify, String notifyEn){
         for (String imId: subscribers){
             if (imId.startsWith(Constants.QQ_PREFIX)) {
                 imId=imId.substring(3);
@@ -430,12 +451,6 @@ public class StellarServiceImpl implements StellarService {
                 LOGGER.info("\n"+notifyEn);
             }
         }
-
-        LOGGER.info("\n"+notify);
-        LOGGER.info("\n"+notifyEn);
-
     }
-
-
 
 }
