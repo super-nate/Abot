@@ -67,6 +67,8 @@ public class TelegramServiceImpl implements ImService {
                         String chatId = message.getChatId().toString();
                         String imId = Constants.TL_PREFIX + chatId;
                                 String accountId = message.getText();
+                        LOGGER.info("Telegram Message record: " + chatId + ": " + accountId);
+                                if (accountId.contains("start")) return;
                         boolean result = subscribe(imId, accountId);
                         String response = "";
                         if (result){
