@@ -301,10 +301,11 @@ public class StellarServiceImpl implements StellarService {
                     "price: 1 %s=%s %s \n"+
                     "txhash: %s";
             String typeZh = sellingNum==0.0?"撤单":"挂单";
+            double priceMsg = sellingNum==0.0? sellingPrice:1/sellingPrice;
 
             //String notify = "账号"+sourceAccount+ "以价格"+price+buyingAssetCode+"("+buyingAssetIssuer+")"+"卖出"+num+sellingAssetCode+"("+sellingAssetIssuer+")";
-            String notify = String.format(template, typeZh,time,  sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode, txHash);
-            String notifyEn= String.format(templateEn, type,time,  sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode, txHash);
+            String notify = String.format(template, typeZh,time,  sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, priceMsg, sellingAssetCode, txHash);
+            String notifyEn= String.format(templateEn, type,time,  sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, priceMsg, sellingAssetCode, txHash);
 
             Set<String> subscribers = mappingService.getSubscribers(sourceAccount);
 
