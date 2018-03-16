@@ -38,7 +38,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 Abot是一个在监听恒星网络且在即时通讯软件里面工作的机器人。你可以添加Abot作为好友来获取关于您的账号变动提醒，就像你的银行卡消费提醒一样。Abot现在支持QQ和telegram。Abot的使用方法非常简单，具体如下：
 
 ## 在QQ中使用Abot
-  步骤1: 在QQ上添加Abot(3269075003)为好友，验证问题答案是Robot
+  步骤1: 在QQ上添加Abot（3269075003）为好友，验证问题答案是Robot
 
 
   步骤2: Abot通过你的好友申请后，发送你的恒星账号给Abot来获取你的账户变动提醒，如果绑定恒星账号成功，Abot会回复绑定成功
