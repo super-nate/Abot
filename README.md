@@ -20,7 +20,7 @@ Abot is a robot in Instant Message software(like QQ and telegram) listening to s
   Step3: That's all, once your account has operation like payment or manage offer, you will get notification in Telegram from Abot
 
 ## Acknowledgement
-The birth of Abot can not be separated from the [TelegramBots](https://github.com/rubenlagus/TelegramBots)open source project, [smartqq](https://github.com/ScienJus/smartqq) open source project and other open source software.
+The birth of Abot can not be separated from the [TelegramBots](https://github.com/rubenlagus/TelegramBots) open source project, [smartqq](https://github.com/ScienJus/smartqq) open source project and other open source software.
 
 ## License
 MIT License
@@ -55,10 +55,10 @@ Abot是一个在监听恒星网络且在即时通讯软件里面工作的机器�
 
   步骤3: 就这样，如果你的账户有转账或者挂单（撤单）之类的变动，Abot将会在Telegram上提醒你
 
-##鸣谢
+## 鸣谢
 Abot 的诞生离不开 [TelegramBots](https://github.com/rubenlagus/TelegramBots)开源项目、[smartqq](https://github.com/ScienJus/smartqq)开源项目以及其他开源软件
 
-##许可
+## 许可
 MIT 开源许可协议
 
 版权所有 (c) 2018, 许智恒
