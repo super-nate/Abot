@@ -5,7 +5,7 @@ Abot is a robot in Instant Message software(like QQ and telegram) listening to s
   Step1: Add Abot(3269075003) as your friend in QQ, the answer of the verification question is Robot
 
 
-  Step2: Once get approved by Abot, send your Stellar account to Abot, Abot will tell you if your subscrition succeed
+  Step2: Once get approved by Abot, send your Stellar account to Abot, Abot will tell you if your subscription succeed
 
 
   Step3: That's all, once your account has operation like payment or manage offer, you will get notification in QQ from Abot
@@ -14,7 +14,7 @@ Abot is a robot in Instant Message software(like QQ and telegram) listening to s
   Step1: Add [Abot](https://t.me/stellar_alert_bot) as your friend in Telegram
 
 
-  Step2: Send your Stellar account to Abot, Abot will tell you if your subscrition succeed
+  Step2: Send your Stellar account to Abot, Abot will tell you if your subscription succeed
 
 
   Step3: That's all, once your account has operation like payment or manage offer, you will get notification in Telegram from Abot
