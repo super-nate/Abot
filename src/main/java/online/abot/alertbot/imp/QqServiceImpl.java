@@ -92,7 +92,7 @@ public class QqServiceImpl implements ImService {
         try {
             bindingMapper.insertBinding(binding);
             mappingService.addNewMapping(binding);
-            stellarService.subscribe(binding);
+            //stellarService.subscribe(binding);
         } catch (Exception e) {
             LOGGER.error("Database exception", e);
             return false;

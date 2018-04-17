@@ -5,5 +5,5 @@ import online.abot.alertbot.domian.Binding;
 
 //To listen to the stellar horizon
 public interface StellarService {
-        boolean subscribe(Binding binding);
+        //boolean subscribe(Binding binding);
 }

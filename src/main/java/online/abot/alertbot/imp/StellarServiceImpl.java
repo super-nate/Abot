@@ -131,25 +131,6 @@ public class StellarServiceImpl implements StellarService {
         Flux.fromIterable(records).subscribeOn(Schedulers.elastic()).subscribe(this::handleOperationData);
     }
 
-
-    @Override
-    public boolean subscribe(Binding binding) {
-       /* try {
-            String accountId = binding.getAccountId();
-            Client client = ClientBuilder.newBuilder().build();
-            String url = String.format("https://horizon.stellar.org/accounts/%s/payments?cursor=now", accountId);
-            WebTarget target = client.target(url);
-            SseEventSource sseEventSource = SseEventSource.target(target).build();
-            sseEventSource.register((event) -> messageHandling(event, accountId));
-            sseEventSource.open();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }*/
-        return true;
-    }
-
     public void handleOperationData(Object object){
         Set<String> accounts = mappingService.getAccounts();
         JSONObject jsonObj = (JSONObject)object;
@@ -205,25 +186,6 @@ public class StellarServiceImpl implements StellarService {
                 subscribers.addAll(subscribers2);
             }
             alert(subscribers, notify, notifyEn);
-            /*for (String imId: subscribers){
-
-                if (imId.startsWith(Constants.QQ_PREFIX)) {
-                    imId=imId.substring(3);
-                    qqService.alert(imId, notify);
-                    LOGGER.info("\n"+notify);
-                }
-
-                if (imId.startsWith(Constants.TL_PREFIX)) {
-                    imId=imId.substring(3);
-                    telegramService.alert(imId, notifyEn);
-                    LOGGER.info("\n"+notifyEn);
-                }
-
-            }*/
-
-            /*LOGGER.info("\n"+notify);
-            LOGGER.info("\n"+notifyEn);*/
-
 
         }
 

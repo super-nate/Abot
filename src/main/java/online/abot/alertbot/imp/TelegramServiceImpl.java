@@ -115,7 +115,7 @@ public class TelegramServiceImpl implements ImService {
         try {
             bindingMapper.insertBinding(binding);
             mappingService.addNewMapping(binding);
-            stellarService.subscribe(binding);
+            //stellarService.subscribe(binding);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
