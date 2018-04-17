@@ -197,12 +197,12 @@ public class StellarServiceImpl implements StellarService {
                     "金额：%s %s（%s）\n"+
                     "交易哈希：%s \n";
 
-            String templateEn = "type: %s\n" +
-                    "time(London): %s\n" +
-                    "from：%s\n" +
-                    "to：%s\n" +
-                    "amount: %s %s（%s）\n"+
-                    "txhash: %s";
+            String templateEn = "Type: %s\n" +
+                    "Time(London): %s\n" +
+                    "From：%s\n" +
+                    "To：%s\n" +
+                    "Amount: %s %s（%s）\n"+
+                    "Txhash: %s";
 
             //String notify = "账号"+from+ "发送"+num+assetCode+"("+assetIssuer+")"+"到账号"+to;
 
@@ -293,19 +293,19 @@ public class StellarServiceImpl implements StellarService {
                     "买入：%s %s（%s）\n" +
                     "价格：1 %s=%s %s \n"+
                     "交易哈希：%s \n";
-            String templateEn="type: %s\n" +
-                    "time(London): %s\n" +
-                    "source: %s\n" +
-                    "sell: %s %s（%s）\n" +
-                    "buy: %s %s（%s）\n" +
-                    "price: 1 %s=%s %s \n"+
-                    "txhash: %s";
+            String templateEn="Type: %s\n" +
+                    "Time(London): %s\n" +
+                    "Source: %s\n" +
+                    "Sell: %s %s（%s）\n" +
+                    "Buy: %s %s（%s）\n" +
+                    "Price: 1 %s=%s %s \n"+
+                    "Txhash: %s";
             String typeZh = sellingNum==0.0?"撤单":"挂单";
-            double priceMsg = sellingNum==0.0? sellingPrice:1/sellingPrice;
+
 
             //String notify = "账号"+sourceAccount+ "以价格"+price+buyingAssetCode+"("+buyingAssetIssuer+")"+"卖出"+num+sellingAssetCode+"("+sellingAssetIssuer+")";
-            String notify = String.format(template, typeZh,time,  sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, priceMsg, sellingAssetCode, txHash);
-            String notifyEn= String.format(templateEn, type,time,  sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, priceMsg, sellingAssetCode, txHash);
+            String notify = String.format(template, typeZh,time,  sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode, txHash);
+            String notifyEn= String.format(templateEn, type,time,  sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode, txHash);
 
             Set<String> subscribers = mappingService.getSubscribers(sourceAccount);
 
@@ -396,10 +396,10 @@ public class StellarServiceImpl implements StellarService {
                 "账户%s卖出%s %s（%s）买入%s %s（%s），价格：1 %s=%s %s\n" + // 账户xxx卖出5xlm（stellar.org）买入10CNY（ripplefox），价格为1xml=2CNY
                 "账户%s卖出%s %s（%s）买入%s %s（%s），价格：1 %s=%s %s\n" ;
 
-        String templateEn = "type: %s\n" +
-                "time(London): %s\n" +
-                "account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s=%s %s\n" +
-                "account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s=%s %s\n";
+        String templateEn = "Type: %s\n" +
+                "Time(London): %s\n" +
+                "Account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s=%s %s\n" +
+                "Account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s=%s %s\n";
 
         String notify = String.format(template, "挂单成交",time,
                 baseAccount, baseAmount, baseAssetCode, baseAssetIssuer, counterAmount, counterAssetCode, counterAssetIssuer, baseAssetCode, price, counterAssetCode,
