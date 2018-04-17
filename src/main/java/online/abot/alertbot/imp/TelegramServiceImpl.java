@@ -67,15 +67,22 @@ public class TelegramServiceImpl implements ImService {
                         String chatId = message.getChatId().toString();
                         String imId = Constants.TL_PREFIX + chatId;
                                 String accountId = message.getText();
-                        LOGGER.info("Telegram message record: " + chatId + ": " + accountId);
-                                if (accountId.contains("start")) return;
-                        boolean result = subscribe(imId, accountId);
-                        String response = "";
-                        if (result){
-                            response = "Bind successfully! \n绑定成功！";
 
-                        }else {
-                            response = "Please make sure you have input your stellar account! \n请确认您输入的是恒星账号！";
+                        if (accountId.contains("start")) {
+                            return;
+                        }
+
+                        String response = "";
+                        if (accountId.length()<30) {//public key is supposed to be longer than 56
+                            response = "Please make sure you have input your stellar account!";
+                        }else{
+                            LOGGER.info("Telegram message record: " + imId + ": " + accountId);
+                            boolean result = subscribe(imId, accountId);
+                            if (result){
+                                response = "Bind successfully!";
+                            }else {
+                                response = "Repeated binding is invalid!";
+                            }
                         }
 
                         //response

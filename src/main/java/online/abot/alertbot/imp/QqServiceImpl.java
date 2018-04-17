@@ -50,16 +50,19 @@ public class QqServiceImpl implements ImService {
                 if (3269075003L == uid){
                     return;
                 }
-
+                if (accountId.length()<30) {//估计公钥都是56位
+                    client.sendMessageToFriend(message.getUserId(), "请确认您输入的是恒星账号！");
+                    return;
+                }
                 String qqName = client.getFriendInfo(uid).getNick();
                 qqNameToUidMap.put(qqName,uid);
                 qqName = Constants.QQ_PREFIX + qqName;
                 LOGGER.info("QQ message record: " + qqName + ": " + accountId);
                 boolean result = subscribe(qqName, accountId);
                 if (result) {
-                    client.sendMessageToFriend(message.getUserId(), "Bind successfully! \n绑定成功！");
+                    client.sendMessageToFriend(message.getUserId(), "绑定成功！");
                 } else {
-                    client.sendMessageToFriend(message.getUserId(), "Please make sure you have input your stellar account! \n请确认您输入的是恒星账号！");
+                    client.sendMessageToFriend(message.getUserId(), "重复绑定无效！");
                 }
             }
 
@@ -91,7 +94,7 @@ public class QqServiceImpl implements ImService {
             mappingService.addNewMapping(binding);
             stellarService.subscribe(binding);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Database exception", e);
             return false;
         }
         return true;
