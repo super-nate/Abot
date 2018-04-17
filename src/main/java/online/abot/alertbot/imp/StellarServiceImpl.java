@@ -169,26 +169,12 @@ public class StellarServiceImpl implements StellarService {
             String txHash  = jsonObj.getString("transaction_hash");
             String assetType = jsonObj.getString("asset_type");
             String assetCode = "XLM";
-            String assetIssuer = "stellar.org";
+            String assetIssuer = "stellar";
             String num = jsonObj.getString("amount");
             if (!"native".equals(assetType)){
                 assetCode = jsonObj.getString("asset_code");
                 assetIssuer=jsonObj.getString("asset_issuer");
             }
-
-/*            String template = "时间（伦敦）：%s\n" +
-                    "类型：%s\n" +
-                    "资金账户：%s\n" +
-                    "接受账户：%s\n" +
-                    "金额：%s %s（%s）\n"+
-                    "交易哈希：%s \n"+
-                    "---------------- \n"+
-                    "time(London): %s\n" +
-                    "type: %s\n" +
-                    "from：%s\n" +
-                    "to：%s\n" +
-                    "amount: %s %s（%s）\n"+
-                    "txhash: %s";*/
 
             String template = "类型：%s\n" +
                     "时间（伦敦）：%s\n" +
@@ -250,7 +236,7 @@ public class StellarServiceImpl implements StellarService {
             String txHash  = jsonObj.getString("transaction_hash");
             String buyingAssetType = jsonObj.getString("buying_asset_type");
             String buyingAssetCode = "XLM";
-            String buyingAssetIssuer = "stellar.org";
+            String buyingAssetIssuer = "stellar";
             if (!"native".equals(buyingAssetType)){
                 buyingAssetCode = jsonObj.getString("buying_asset_code");
                 buyingAssetIssuer = jsonObj.getString("buying_asset_issuer");
@@ -258,7 +244,7 @@ public class StellarServiceImpl implements StellarService {
 
             String sellingAssetType = jsonObj.getString("selling_asset_type");
             String sellingAssetCode = "XLM";
-            String sellingAssetIssuer = "stellar.org";
+            String sellingAssetIssuer = "stellar";
             if (!"native".equals(sellingAssetType)){
                 sellingAssetCode = jsonObj.getString("selling_asset_code");
                 sellingAssetIssuer = jsonObj.getString("selling_asset_issuer");
@@ -271,21 +257,6 @@ public class StellarServiceImpl implements StellarService {
             double sellingPrice = Double.valueOf(price);
             String buyingNum = String.valueOf(sellingNum*sellingPrice);
 
-/*            String template = "时间（伦敦）：%s\n" +
-                    "类型：%s\n" +
-                    "资金账户：%s\n" +
-                    "卖出：%s %s（%s）\n" +
-                    "买入：%s %s（%s）\n" +
-                    "价格：1 %s=%s %s \n"+
-                    "交易哈希：%s \n"+
-                    "---------------- \n"+
-                    "time(London): %s\n" +
-                    "type: %s\n" +
-                    "source: %s\n" +
-                    "sell: %s %s（%s）\n" +
-                    "buy: %s %s（%s）\n" +
-                    "price: 1 %s=%s %s \n"+
-                    "txhash: %s";*/
             String template = "类型：%s\n" +
                     "时间（伦敦）：%s\n" +
                     "资金账户：%s\n" +
@@ -298,10 +269,9 @@ public class StellarServiceImpl implements StellarService {
                     "Source: %s\n" +
                     "Sell: %s %s（%s）\n" +
                     "Buy: %s %s（%s）\n" +
-                    "Price: 1 %s=%s %s \n"+
+                    "Price: 1 %s = %s %s \n"+
                     "Txhash: %s";
             String typeZh = sellingNum==0.0?"撤单":"挂单";
-
 
             //String notify = "账号"+sourceAccount+ "以价格"+price+buyingAssetCode+"("+buyingAssetIssuer+")"+"卖出"+num+sellingAssetCode+"("+sellingAssetIssuer+")";
             String notify = String.format(template, typeZh,time,  sourceAccount, num, sellingAssetCode,sellingAssetIssuer, buyingNum, buyingAssetCode, buyingAssetIssuer, buyingAssetCode, 1/sellingPrice, sellingAssetCode, txHash);
@@ -310,23 +280,6 @@ public class StellarServiceImpl implements StellarService {
             Set<String> subscribers = mappingService.getSubscribers(sourceAccount);
 
             alert(subscribers, notify, notifyEn);
-            /*for (String imId: subscribers){
-                if (imId.startsWith(Constants.QQ_PREFIX)) {
-                    imId=imId.substring(3);
-                    qqService.alert(imId, notify);
-                    LOGGER.info("\n"+notify);
-                }
-                if (imId.startsWith(Constants.TL_PREFIX)) {
-                    imId=imId.substring(3);
-                    telegramService.alert(imId, notifyEn);
-                    LOGGER.info("\n"+notifyEn);
-                }
-            }*/
-
-           /* LOGGER.info("\n"+notify);
-            LOGGER.info("\n"+notifyEn);*/
-
-
         }
 
 
@@ -347,13 +300,10 @@ public class StellarServiceImpl implements StellarService {
         //LOGGER.info("trade: " + object);
 
         String time = jsonObj.getString("ledger_close_time");
-        String id  = jsonObj.getString("id");
-        String offerId  = jsonObj.getString("offer_id");
-
 
         String baseAssetType = jsonObj.getString("base_asset_type");
         String baseAssetCode = "XLM";
-        String baseAssetIssuer = "stellar.org";
+        String baseAssetIssuer = "stellar";
         if (!"native".equals(baseAssetType)){
             baseAssetCode = jsonObj.getString("base_asset_code");
             baseAssetIssuer = jsonObj.getString("base_asset_issuer");
@@ -362,7 +312,7 @@ public class StellarServiceImpl implements StellarService {
 
         String counterAssetType = jsonObj.getString("counter_asset_type");
         String counterAssetCode = "XLM";
-        String counterAssetIssuer = "stellar.org";
+        String counterAssetIssuer = "stellar";
         if (!"native".equals(counterAssetType)){
             counterAssetCode = jsonObj.getString("counter_asset_code");
             counterAssetIssuer = jsonObj.getString("counter_asset_issuer");
@@ -375,31 +325,15 @@ public class StellarServiceImpl implements StellarService {
         double bAmount = Double.valueOf(baseAmount);
         double price = cAmount/bAmount;
 
-        /*String template =
-                "账户%s卖出%s %s（%s）买入%s %s（%s），价格：1 %s=%s %s\n" + // 账户xxx卖出5xlm（stellar.org）买入10CNY（ripplefox），价格为1xml=2CNY
-                "账户%s卖出%s %s（%s）买入%s %s（%s），价格：1 %s=%s %s\n" +
-                "伦敦时间 London time: %s\n" +
-                "类型 type: %s\n" +
-                "account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s=%s %s\n" +
-                "account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s=%s %s\n";
-
-        String notify = String.format(template, *//*time, "挂单成交",*//*
-                baseAccount, baseAmount, baseAssetCode, baseAssetIssuer, counterAmount, counterAssetCode, counterAssetIssuer, baseAssetCode, price, counterAssetCode,
-                counterAccount, counterAmount, counterAssetCode, counterAssetIssuer, baseAmount, baseAssetCode, baseAssetIssuer, counterAssetCode, 1/price, baseAssetCode,
-                time, "成交 trade",
-                baseAccount, baseAmount, baseAssetCode, baseAssetIssuer, counterAmount, counterAssetCode, counterAssetIssuer, baseAssetCode, price, counterAssetCode,
-                counterAccount, counterAmount, counterAssetCode, counterAssetIssuer, baseAmount, baseAssetCode, baseAssetIssuer, counterAssetCode, 1/price, baseAssetCode);*/
-
-
         String template ="类型：%s\n" +
                 "时间（伦敦）：%s\n" +
-                "账户%s卖出%s %s（%s）买入%s %s（%s），价格：1 %s=%s %s\n" + // 账户xxx卖出5xlm（stellar.org）买入10CNY（ripplefox），价格为1xml=2CNY
-                "账户%s卖出%s %s（%s）买入%s %s（%s），价格：1 %s=%s %s\n" ;
+                "账户%s卖出%s %s（%s）买入%s %s（%s），价格：1 %s = %s %s\n" + // 账户xxx卖出5xlm（stellar.org）买入10CNY（ripplefox），价格为1xml=2CNY
+                "账户%s卖出%s %s（%s）买入%s %s（%s），价格：1 %s = %s %s\n" ;
 
         String templateEn = "Type: %s\n" +
                 "Time(London): %s\n" +
-                "Account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s=%s %s\n" +
-                "Account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s=%s %s\n";
+                "Account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s = %s %s\n" +
+                "Account %s sell %s %s（%s）buy %s %s（%s）, price 1 %s = %s %s\n";
 
         String notify = String.format(template, "挂单成交",time,
                 baseAccount, baseAmount, baseAssetCode, baseAssetIssuer, counterAmount, counterAssetCode, counterAssetIssuer, baseAssetCode, price, counterAssetCode,
@@ -421,21 +355,6 @@ public class StellarServiceImpl implements StellarService {
         //LOGGER.info("subscribers: " + subscribers);
 
         alert(subscribers, notify, notifyEn);
-/*        for (String imId: subscribers){
-            if (imId.startsWith(Constants.QQ_PREFIX)) {
-                imId=imId.substring(3);
-                qqService.alert(imId, notify);
-                LOGGER.info("\n"+notify);
-            }
-            if (imId.startsWith(Constants.TL_PREFIX)) {
-                imId=imId.substring(3);
-                telegramService.alert(imId, notifyEn);
-                LOGGER.info("\n"+notifyEn);
-            }
-        }*/
-
-        /*LOGGER.info("\n"+notify);
-        LOGGER.info("\n"+notifyEn);*/
 
     }
 
