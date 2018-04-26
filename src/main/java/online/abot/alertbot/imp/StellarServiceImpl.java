@@ -30,7 +30,7 @@ public class StellarServiceImpl implements StellarService {
 
     private static final String OPERATIONS_URL = "https://horizon.stellar.org/operations?cursor=%s&limit=200";
     @Autowired
-    @Qualifier("QqService")
+    @Qualifier("NewQqService")
     ImService qqService;
 
     @Autowired

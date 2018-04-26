@@ -39,7 +39,7 @@ public class QqServiceImpl implements ImService {
     @Autowired
     BindingMapper bindingMapper;
 
-    @PostConstruct
+    //@PostConstruct
     private void init() {
 
         client = new SmartQQClient(new MessageCallback() {

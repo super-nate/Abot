@@ -1,5 +1,6 @@
 package online.abot.alertbot.imp;
 
+import com.alibaba.fastjson.JSONObject;
 import com.scienjus.smartqq.callback.MessageCallback;
 import com.scienjus.smartqq.client.SmartQQClient;
 import com.scienjus.smartqq.model.DiscussMessage;
@@ -9,26 +10,31 @@ import com.scienjus.smartqq.model.Message;
 import online.abot.alertbot.constant.Constants;
 import online.abot.alertbot.domian.Binding;
 import online.abot.alertbot.mapper.BindingMapper;
-import online.abot.alertbot.service.MappingService;
 import online.abot.alertbot.service.ImService;
+import online.abot.alertbot.service.MappingService;
 import online.abot.alertbot.service.StellarService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service("QqService")
-public class QqServiceImpl implements ImService {
+@Service("NewQqService")
+public class NewQqServiceImpl implements ImService {
 
-    private static final Logger LOGGER = Logger.getLogger(QqServiceImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(NewQqServiceImpl.class);
 
-    private SmartQQClient client = null;
-
-    private Map<String, Long> qqNameToUidMap = new HashMap();
+    private static final String HTTP_API_URL = "http://206.189.78.117:5700/send_private_msg_async";
+    private static final String ACCESS_TOKEN = "Token 5efa35a19be";
 
     @Autowired
     StellarService stellarService;
@@ -39,50 +45,10 @@ public class QqServiceImpl implements ImService {
     @Autowired
     BindingMapper bindingMapper;
 
-    @PostConstruct
-    private void init() {
+    private final RestTemplate restTemplate;
 
-        client = new SmartQQClient(new MessageCallback() {
-            @Override
-            public void onMessage(Message message, SmartQQClient client) {
-                String accountId = message.getContent();
-                long uid = message.getUserId();//TODO return
-                if (3269075003L == uid){
-                    return;
-                }
-                if (accountId.length()<30) {//估计公钥都是56位
-                    client.sendMessageToFriend(message.getUserId(), "请确认您输入的是恒星账号！");
-                    return;
-                }
-                String qqName = client.getFriendInfo(uid).getNick();
-                qqNameToUidMap.put(qqName,uid);
-                qqName = Constants.QQ_PREFIX + qqName;
-                LOGGER.info("QQ message record: " + qqName + ": " + accountId);
-                boolean result = subscribe(qqName, accountId);
-                if (result) {
-                    client.sendMessageToFriend(message.getUserId(), "绑定成功！");
-                } else {
-                    client.sendMessageToFriend(message.getUserId(), "重复绑定无效！");
-                }
-            }
-
-            @Override
-            public void onGroupMessage(GroupMessage message, SmartQQClient client) {
-                System.out.println(message.getContent());
-            }
-
-            @Override
-            public void onDiscussMessage(DiscussMessage message, SmartQQClient client) {
-                System.out.println(message.getContent());
-            }
-        });
-
-        List<Friend> friendList = client.getFriendList();
-        for (Friend friend:friendList){
-            String qqName = friend.getNickname();
-            qqNameToUidMap.put(qqName,friend.getUserId());
-        }
-
+    public NewQqServiceImpl(RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplate = restTemplateBuilder.build();
     }
 
     @Override
@@ -101,10 +67,22 @@ public class QqServiceImpl implements ImService {
     }
 
     @Override
-    public boolean alert(String qqName, String message) {
+    public boolean alert(String qqId, String message) {
         try{
-            long uid = qqNameToUidMap.get(qqName);
-            client.sendMessageToFriend(uid,  message);
+            JSONObject alert = new JSONObject();
+            alert.put("user_id", qqId);
+            alert.put("message",message);
+
+
+            HttpHeaders headers = new HttpHeaders();
+            //headers.set("Authorization", ACCESS_TOKEN);
+
+            HttpEntity<String> entity = new HttpEntity<String>(alert.toJSONString(), headers);
+
+
+            //ResponseEntity<String> respEntity = restTemplate.exchange(HTTP_API_URL, HttpMethod.POST, entity, String.class);
+            String result = restTemplate.postForObject( HTTP_API_URL, alert, String.class);
+            //LOGGER.debug(respEntity.getBody());
         }catch (Exception e){
             e.printStackTrace();
         }
