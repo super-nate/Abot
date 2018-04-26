@@ -175,15 +175,20 @@ public class StellarServiceImpl implements StellarService {
 
             String notify = String.format(template, "转账",time,  from, to, num, assetCode, assetIssuer, txHash);
             String notifyEn = String.format(templateEn, type,time, from, to, num, assetCode, assetIssuer, txHash);
-            Set<String> subscribers = mappingService.getSubscribers(sourceAccount);
-            Set<String> subscribers1 = mappingService.getSubscribers(from);
-            Set<String> subscribers2 = mappingService.getSubscribers(to);
+
+            Set<String> subscribers = new HashSet<>();
+            Set<String> subscribers1 = mappingService.getSubscribers(sourceAccount);
+            Set<String> subscribers2 = mappingService.getSubscribers(from);
+            Set<String> subscribers3 = mappingService.getSubscribers(to);
 
             if (subscribers1!=null){
                 subscribers.addAll(subscribers1);
             }
             if (subscribers2!=null){
                 subscribers.addAll(subscribers2);
+            }
+            if (subscribers3!=null){
+                subscribers.addAll(subscribers3);
             }
             alert(subscribers, notify, notifyEn);
 
