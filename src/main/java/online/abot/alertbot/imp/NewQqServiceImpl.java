@@ -75,14 +75,15 @@ public class NewQqServiceImpl implements ImService {
 
 
             HttpHeaders headers = new HttpHeaders();
-            //headers.set("Authorization", ACCESS_TOKEN);
+            headers.set("Authorization", ACCESS_TOKEN);
+            headers.set("Content-Type", "application/json");
 
             HttpEntity<String> entity = new HttpEntity<String>(alert.toJSONString(), headers);
 
 
-            //ResponseEntity<String> respEntity = restTemplate.exchange(HTTP_API_URL, HttpMethod.POST, entity, String.class);
-            String result = restTemplate.postForObject( HTTP_API_URL, alert, String.class);
-            //LOGGER.debug(respEntity.getBody());
+            ResponseEntity<String> respEntity = restTemplate.exchange(HTTP_API_URL, HttpMethod.POST, entity, String.class);
+            //String result = restTemplate.postForObject( HTTP_API_URL, alert, String.class);
+            LOGGER.debug(respEntity.getBody());
         }catch (Exception e){
             e.printStackTrace();
         }
