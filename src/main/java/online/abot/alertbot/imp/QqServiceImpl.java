@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//use the NewQqServiceImpl now, because of the poor performance of webqq
+@Deprecated
 @Service("QqService")
 public class QqServiceImpl implements ImService {
 
