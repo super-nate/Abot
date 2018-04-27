@@ -15,6 +15,7 @@ import online.abot.alertbot.service.MappingService;
 import online.abot.alertbot.service.StellarService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -34,7 +35,9 @@ public class NewQqServiceImpl implements ImService {
     private static final Logger LOGGER = Logger.getLogger(NewQqServiceImpl.class);
 
     private static final String HTTP_API_URL = "http://206.189.78.117:5700/send_private_msg_async";
-    private static final String ACCESS_TOKEN = "Token 5efa35a19be";
+
+    @Value("${access.token}")
+    private String ACCESS_TOKEN;
 
     @Autowired
     StellarService stellarService;

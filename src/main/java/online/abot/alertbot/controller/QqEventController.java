@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,9 @@ import java.util.Formatter;
 public class QqEventController {
 
     private static final Logger LOGGER = Logger.getLogger(QqEventController.class);
-    private static final String SECRET = "AAFPDoRt";
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+    @Value("${secret.token}")
+    private String SECRET;
 
     @Autowired
     @Qualifier("NewQqService")
