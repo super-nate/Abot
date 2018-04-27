@@ -44,6 +44,9 @@ public class QqEventController {
 
         //check X-Signature
         String xSig = servletRequest.getHeaders().get("X-Signature").get(0).substring(5);
+        /*LOGGER.info(servletRequest.getHeaders().get("X-Signature").get(0));
+        LOGGER.info(request);*/
+
         if(StringUtils.isEmpty(xSig)){
             return "";
         }

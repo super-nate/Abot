@@ -34,7 +34,7 @@ public class NewQqServiceImpl implements ImService {
 
     private static final Logger LOGGER = Logger.getLogger(NewQqServiceImpl.class);
 
-    private static final String HTTP_API_URL = "http://206.189.78.117:5700/send_private_msg_async";
+    private static final String HTTP_API_URL = "http://localhost:5700/send_private_msg_async";
 
     @Value("${access.token}")
     private String ACCESS_TOKEN;
