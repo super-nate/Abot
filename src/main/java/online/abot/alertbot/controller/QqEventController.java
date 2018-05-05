@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.server.reactive.ServerHttpRequest;
+//import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -40,10 +40,11 @@ public class QqEventController {
 
     @PostMapping("/callback")
     @ResponseBody
-    public String handleEvent(@RequestBody String request, ServerHttpRequest servletRequest){
+    public String handleEvent(@RequestBody String request, HttpServletRequest servletRequest/*ServerHttpRequest servletRequest*/){
 
         //check X-Signature
-        String xSig = servletRequest.getHeaders().get("X-Signature").get(0).substring(5);
+        //String xSig = servletRequest.getHeaders().get("X-Signature").get(0).substring(5);
+        String xSig = servletRequest.getHeader("X-Signature").substring(5);
         /*LOGGER.info(servletRequest.getHeaders().get("X-Signature").get(0));
         LOGGER.info(request);*/
 

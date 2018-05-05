@@ -1,3 +1,4 @@
+/*
 package online.abot.alertbot.test;
 
 import org.springframework.core.ParameterizedTypeReference;
@@ -22,17 +23,24 @@ public class SSEClient {
                 .filter(sse -> Objects.nonNull(sse.data()))
                 .map(ServerSentEvent::data)
                 .subscribe(System.out::println);
-               /* .buffer(10)
+               */
+/* .buffer(10)
                 .doOnNext(System.out::println)
-                .blockFirst();*/
+                .blockFirst();*//*
+
     }
 
+*/
 /*    public static void main(String[] args) throws InterruptedException {
-        *//*final Flux<ServerSentEvent> stream = WebClient
+        *//*
+*/
+/*final Flux<ServerSentEvent> stream = WebClient
                 .create("http://emojitrack-gostreamer.herokuapp.com")
                 .get().uri("/subscribe/eps")
                 .retrieve()
                 .bodyToFlux(ServerSentEvent.class);*//*
+*/
+/*
 
         final Flux<String> stream = WebClient
                 .create("https://horizon.stellar.org")
@@ -44,5 +52,6 @@ public class SSEClient {
         stream.subscribe(sse -> System.out.println("Received: "+sse));
 
         //TimeUnit.MINUTES.sleep(10);
-    }*/
-}
+    }*//*
+
+}*/
