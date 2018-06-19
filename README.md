@@ -1,5 +1,5 @@
 # Abot
-[Abot](abot.online)  is a robot in Instant Message software(like QQ and telegram) listening to stellar network. You can subscribe to Abot for recieving notication related to your stellar account changes in IM softwares. Abot now supports QQ and Telegram. Abot is very easy to use, details are explained as following:
+[Abot](http://abot.online/)  is a robot in Instant Message software(like QQ and telegram) listening to stellar network. You can subscribe to Abot for recieving notication related to your stellar account changes in IM softwares. Abot now supports QQ and Telegram. Abot is very easy to use, details are explained as following:
 
 ## Subscribe to Abot in QQ    
   Step1: Add Abot(3269075003) as your friend in QQ
@@ -26,7 +26,7 @@ The birth of Abot can not be separated from the [TelegramBots](https://github.co
 [MIT License](https://github.com/supermanheng21/Abot/blob/master/LICENSE)
 
 # Abot
-[Abot](abot.online)是一个在监听恒星网络且在即时通讯软件里面工作的机器人。你可以添加Abot作为好友来获取关于您的账号变动提醒，就像你的银行卡消费提醒一样。Abot现在支持QQ和telegram。Abot的使用方法非常简单，具体如下：
+[Abot](http://abot.online/) 是一个在监听恒星网络且在即时通讯软件里面工作的机器人。你可以添加Abot作为好友来获取关于您的账号变动提醒，就像你的银行卡消费提醒一样。Abot现在支持QQ和telegram。Abot的使用方法非常简单，具体如下：
 
 ## 在QQ中使用Abot
   步骤1: 在QQ上添加Abot（3269075003）为好友
